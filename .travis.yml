@@ -1,0 +1,17 @@
+dist: bionic
+language: csharp
+dotnet: "3.0.100"
+mono: none
+
+env:
+  global:
+    - PATH="$PATH:$HOME/.dotnet/tools"
+
+install:
+  - dotnet tool restore 
+
+script:
+ - dotnet paket install
+ - dotnet restore
+ - dotnet build
+ - dotnet test
