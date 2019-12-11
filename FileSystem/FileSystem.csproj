@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <RootNamespace>Messerli.FileSystem</RootNamespace>
@@ -12,14 +12,14 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
     <PropertyGroup>
+        <PackageId>Messerli.FileSystem</PackageId>
+        <Description>FileSystem implementation that allows performing file system actions</Description>
+        <Authors>Jan Nils Ferner, Ruben Schmidmeister, Thomas Bruderer, Sergio Sutter</Authors>
         <RepositoryUrl>https://github.com/messerli-informatik-ag/filesystem</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageId>Messerli.FileSystem</PackageId>
-        <PackageTags>filesystem</PackageTags>
         <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
-        <Authors>Jan Nils Ferner, Dominic Groth, Ruben Schmidmeister, Sergio Sutter</Authors>
         <Copyright>© Messerli Informatik AG. All rights reserved.</Copyright>
-        <Description>Support classes for filesystem</Description>
+        <PackageTags>filesystem</PackageTags>
     </PropertyGroup>
     <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

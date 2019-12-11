@@ -5,6 +5,7 @@
         <AssemblyName>Messerli.FileSystem.Test</AssemblyName>
     </PropertyGroup>
     <PropertyGroup>
+        <IsPackable>false</IsPackable>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <LangVersion>8.0</LangVersion>
         <Nullable>enable</Nullable>
