@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using Messerli.CompositionRoot;
 using Messerli.Test.Utility;
 using Xunit;
 
