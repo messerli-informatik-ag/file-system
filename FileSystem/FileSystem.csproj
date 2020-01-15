@@ -15,7 +15,6 @@
     <PropertyGroup>
         <PackageId>Messerli.FileSystem</PackageId>
         <Description>File system abstraction that allows mocking file system actions</Description>
-        <Authors>Jan Nils Ferner, Ruben Schmidmeister, Thomas Bruderer, Sergio Sutter</Authors>
         <RepositoryUrl>https://github.com/messerli-informatik-ag/filesystem</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
