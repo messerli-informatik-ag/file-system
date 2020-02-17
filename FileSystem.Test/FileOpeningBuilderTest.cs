@@ -5,11 +5,31 @@ using System.Linq;
 using Messerli.Test.Utility;
 using Xunit;
 
-namespace Messerli.FileOpeningBuilder.Test
+namespace Messerli.FileSystem.Test
 {
-
     public class FileOpeningBuilderTest
     {
+        private const string DirectoryName = "FileOpeningBuilderTest";
+
+        private const string SubDirectoryName = "directory";
+
+        private const string ContentToWrite = "wobble\n";
+
+        private static readonly TestFileData RegularFile =
+            new TestFileData("regular_file.txt", "foo\n");
+
+        private static readonly TestFileData ReadOnlyFile =
+            new TestFileData("readonly_file.txt", "bar\n");
+
+        private static readonly TestFileData HiddenFile =
+            new TestFileData("hidden_file.txt", "baz\n");
+
+        private static readonly TestFileData NonExistentFile =
+            new TestFileData("nonexistent_file.txt", ContentToWrite);
+
+        private static readonly TestFileData NestedFile =
+            new TestFileData(Path.Combine(SubDirectoryName, "nested_file.txt"), string.Empty);
+
         private delegate string GetTestFile(string fileName);
 
         [Fact]
@@ -48,9 +68,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [MemberData(nameof(GetReadableFiles))]
         public void ReadsFiles(TestFileData testFileData)
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 AssertThatFileContains(getTestFilePath(testFileData.Name), testFileData.Content);
             }
         }
@@ -59,9 +79,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [MemberData(nameof(GetWritableFiles))]
         public void ReadsWritableFiles(TestFileData testFileData)
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 var builder = new FileOpeningBuilder()
                     .Read(true)
                     .Write(true);
@@ -72,9 +92,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [Fact]
         public void ThrowsWhenWritingReadonlyFileFile()
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 Assert.Throws<UnauthorizedAccessException>(() =>
                 {
                     using (new FileOpeningBuilder()
@@ -84,7 +104,6 @@ namespace Messerli.FileOpeningBuilder.Test
                     }
                 });
             }
-
         }
 
         [Theory]
@@ -100,9 +119,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [MemberData(nameof(GetWritableFiles))]
         public void ReadingOverwrittenFileReturnsEmptyContent(TestFileData testFileData)
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 using (var stream = new FileOpeningBuilder()
                     .Read(true)
                     .Write(true)
@@ -121,14 +140,13 @@ namespace Messerli.FileOpeningBuilder.Test
         [MemberData(nameof(GetWritableFiles))]
         public void OpeningFileWithWriteAccessWithoutWritingDoesNotOverwriteContents(TestFileData testFileData)
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 using (new FileOpeningBuilder()
                     .Write(true)
                     .Open(getTestFilePath(testFileData.Name)))
                 {
-
                 }
 
                 AssertThatFileContains(getTestFilePath(testFileData.Name), testFileData.Content);
@@ -138,9 +156,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [Fact]
         public void ThrowsWhenUsingCreateWithoutReadOrWrite()
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 Assert.Throws<InvalidOperationException>(() =>
                 {
                     using (new FileOpeningBuilder()
@@ -174,9 +192,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [Fact]
         public void CreatesAndReadsNewFile()
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 var builder = new FileOpeningBuilder()
                     .Read(true)
                     .Create(true);
@@ -188,9 +206,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [MemberData(nameof(GetWritableFiles))]
         public void AppendsToExistingFile(TestFileData testFileData)
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 using (var stream = new FileOpeningBuilder()
                         .Append(true)
                         .Open(getTestFilePath(testFileData.Name)))
@@ -207,9 +225,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [Fact]
         public void ThrowsWhenAppendingToReadonlyFile()
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 Assert.Throws<UnauthorizedAccessException>(() =>
                 {
                     using (new FileOpeningBuilder()
@@ -225,9 +243,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [MemberData(nameof(GetReadableFiles))]
         public void ThrowsWhenForceCreatingExistingFile(TestFileData testFileData)
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 Assert.Throws<IOException>(() =>
                 {
                     using (new FileOpeningBuilder()
@@ -243,9 +261,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [Fact]
         public void ThrowsWhenForceCreatingWithOnlyReadAccess()
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 Assert.Throws<InvalidOperationException>(() =>
                 {
                     using (new FileOpeningBuilder()
@@ -283,15 +301,14 @@ namespace Messerli.FileOpeningBuilder.Test
         [MemberData(nameof(GetWritableFiles))]
         public void TruncatingFileWithoutWritingMakesItEmpty(TestFileData testFileData)
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 using (new FileOpeningBuilder()
                     .Write(true)
                     .Truncate(true)
                     .Open(getTestFilePath(testFileData.Name)))
                 {
-
                 }
 
                 AssertThatFileContains(getTestFilePath(testFileData.Name), string.Empty);
@@ -302,9 +319,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [MemberData(nameof(GetWritableFiles))]
         public void ReadsTruncatedFileDirectly(TestFileData testFileData)
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 var builder = new FileOpeningBuilder()
                     .Write(true)
                     .Read(true)
@@ -317,9 +334,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [MemberData(nameof(GetWritableFiles))]
         public void ThrowsWhenTruncatingWithOnlyReadAccess(TestFileData testFileData)
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 Assert.Throws<InvalidOperationException>(() =>
                 {
                     using (new FileOpeningBuilder()
@@ -335,9 +352,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [Fact]
         public void ThrowsWhenTruncatingReadonlyFile()
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 Assert.Throws<UnauthorizedAccessException>(() =>
                 {
                     using (new FileOpeningBuilder()
@@ -354,9 +371,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [MemberData(nameof(GetWritableFiles))]
         public void ThrowsWhenCombiningTruncateAndAppend(TestFileData testFileData)
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironmentProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
                 Assert.Throws<InvalidOperationException>(() =>
                 {
                     using (
@@ -373,9 +390,9 @@ namespace Messerli.FileOpeningBuilder.Test
         [Fact]
         public void TruncatedNewFileCanBeWrittenTo()
         {
-            var (testEnvironmentDisposable, _) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironementProvider = CreateTestEnvironmentProvider())
             {
+                SetupTestEnvironment(testEnvironementProvider.RootDirectory);
                 var builder = new FileOpeningBuilder()
                     .Write(true)
                     .Create(true)
@@ -388,7 +405,7 @@ namespace Messerli.FileOpeningBuilder.Test
         [MemberData(nameof(Modifiers))]
         public void CallingModifiersCreatesACopy(Func<IFileOpeningBuilder, IFileOpeningBuilder> applyModifier)
         {
-            var builderOne = new FileOpeningBuilder();
+            var builderOne = new Messerli.FileSystem.FileOpeningBuilder();
             var builderTwo = applyModifier(builderOne);
             Assert.NotEqual(builderOne, builderTwo);
         }
@@ -415,16 +432,29 @@ namespace Messerli.FileOpeningBuilder.Test
             };
         }
 
+        public static IEnumerable<object[]> GetReadableFiles()
+        {
+            yield return new object[] { RegularFile };
+            yield return new object[] { ReadOnlyFile };
+            yield return new object[] { HiddenFile };
+            yield return new object[] { NestedFile };
+        }
+
+        public static IEnumerable<object[]> GetWritableFiles()
+        {
+            yield return new object[] { RegularFile };
+            yield return new object[] { HiddenFile };
+            yield return new object[] { NestedFile };
+        }
 
         private static void AssertThatFileContainsWrittenContent(
             IFileOpeningBuilder fileOpeningBuilder,
             TestFileData testFileData,
-            string contentToWrite
-        )
+            string contentToWrite)
         {
-            var (testEnvironmentDisposable, getTestFilePath) = SetupTestEnvironment();
-            using (testEnvironmentDisposable)
+            using (var testEnvironementProvider = CreateTestEnvironmentProvider())
             {
+                var getTestFilePath = SetupTestEnvironment(testEnvironementProvider.RootDirectory);
                 using (var stream = fileOpeningBuilder
                     .Open(getTestFilePath(testFileData.Name)))
                 {
@@ -454,31 +484,33 @@ namespace Messerli.FileOpeningBuilder.Test
             }
         }
 
-        private static (TestEnvironmentProvider, GetTestFile) SetupTestEnvironment()
+        private static GetTestFile SetupTestEnvironment(string rootDirectory)
         {
-            var testFiles = CreateTestFiles().ToArray();
-            var testEnvironmentProvider = new TestEnvironmentProvider(testFiles);
-
-            var getTestFile = CreateGetTestFilePath(testEnvironmentProvider.RootDirectory);
+            var getTestFile = CreateGetTestFilePath(rootDirectory);
 
             var fileToAttributes = new Dictionary<string, FileAttributes>
             {
-                {RegularFile.Name, FileAttributes.Normal },
-                {ReadOnlyFile.Name, FileAttributes.ReadOnly},
-                {HiddenFile.Name, FileAttributes.Hidden },
-                {SubDirectoryName, FileAttributes.Directory }
+                { RegularFile.Name, FileAttributes.Normal },
+                { ReadOnlyFile.Name, FileAttributes.ReadOnly },
+                { HiddenFile.Name, FileAttributes.Hidden },
+                { SubDirectoryName, FileAttributes.Directory },
             };
 
             foreach (var (file, attributes) in fileToAttributes)
             {
                 var fileInfo = new FileInfo(getTestFile(file))
                 {
-                    Attributes = attributes
+                    Attributes = attributes,
                 };
             }
 
+            return getTestFile;
+        }
 
-            return (testEnvironmentProvider, getTestFile);
+        private static TestEnvironmentProvider CreateTestEnvironmentProvider()
+        {
+            var testFiles = CreateTestFiles().ToArray();
+            return new TestEnvironmentProvider(testFiles);
         }
 
         private static GetTestFile CreateGetTestFilePath(string root)
@@ -493,20 +525,23 @@ namespace Messerli.FileOpeningBuilder.Test
                     RegularFile.Name,
                     ReadOnlyFile.Name,
                     HiddenFile.Name,
-                    NestedFile.Name
+                    NestedFile.Name,
                 }
                 .Select(fileName => Path.Combine(DirectoryName, fileName))
-                .Select(path => new TestFile(path));
+                .Select(path => new TestFile(path, path));
         }
 
         private static string ReadStream(Stream stream)
         {
-            var streamReader = new StreamReader(stream);
-            return streamReader
-                .ReadToEnd()
-                // For some reason, the stream reader sometimes
-                // lies about the newlines it encountered
-                .Replace(Environment.NewLine, "\n");
+            using (var streamReader = new StreamReader(stream))
+            {
+                return streamReader
+                    .ReadToEnd()
+
+                    // For some reason, the stream reader sometimes
+                    // lies about the newlines it encountered
+                    .Replace(Environment.NewLine, "\n");
+            }
         }
 
         public struct TestFileData
@@ -520,44 +555,6 @@ namespace Messerli.FileOpeningBuilder.Test
             public string Name { get; }
 
             public string Content { get; }
-        }
-
-        private const string DirectoryName = "FileOpeningBuilderTest";
-
-        private static readonly TestFileData RegularFile =
-            new TestFileData("regular_file.txt", "foo\n");
-
-        private static readonly TestFileData ReadOnlyFile =
-            new TestFileData("readonly_file.txt", "bar\n");
-
-        private static readonly TestFileData HiddenFile =
-            new TestFileData("hidden_file.txt", "baz\n");
-
-
-        private static readonly TestFileData NonExistentFile =
-            new TestFileData("nonexistent_file.txt", ContentToWrite);
-
-
-        private static readonly TestFileData NestedFile =
-            new TestFileData(Path.Combine(SubDirectoryName, "nested_file.txt"), string.Empty);
-
-        private const string SubDirectoryName = "directory";
-
-        private const string ContentToWrite = "wobble\n";
-
-        public static IEnumerable<object[]> GetReadableFiles()
-        {
-            yield return new object[] { RegularFile };
-            yield return new object[] { ReadOnlyFile };
-            yield return new object[] { HiddenFile };
-            yield return new object[] { NestedFile };
-        }
-
-        public static IEnumerable<object[]> GetWritableFiles()
-        {
-            yield return new object[] { RegularFile };
-            yield return new object[] { HiddenFile };
-            yield return new object[] { NestedFile };
         }
     }
 }

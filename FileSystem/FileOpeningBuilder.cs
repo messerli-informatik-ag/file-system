@@ -69,15 +69,13 @@ namespace Messerli.FileSystem
             bool? write = null,
             bool? read = null,
             bool? createNew = null)
-        {
-            return new FileOpeningBuilder(
+            => new FileOpeningBuilder(
                 create ?? _create,
                 truncate ?? _truncate,
                 append ?? _append,
                 write ?? _write,
                 read ?? _read,
                 createNew ?? _createNew);
-        }
 
         private void HandleNotNativelySupportedConfigurations(FileInfo path)
         {
@@ -131,14 +129,12 @@ namespace Messerli.FileSystem
         [SuppressMessage("Code Quality", "IDE0051")]
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private bool CustomEquals(FileOpeningBuilder other)
-        {
-            return _create == other._create &&
-                   _truncate == other._truncate &&
-                   _append == other._append &&
-                   _write == other._write &&
-                   _read == other._read &&
-                   _createNew == other._createNew;
-        }
+            => _create == other._create &&
+               _truncate == other._truncate &&
+               _append == other._append &&
+               _write == other._write &&
+               _read == other._read &&
+               _createNew == other._createNew;
 
         private struct FileOpeningSettings
         {
