@@ -91,39 +91,35 @@ namespace Messerli.FileSystem
 
         private FileOpeningSettings BuildSettings()
         {
-            var fileAccess =
-                _read
-                    ? _write
-                        ? FileAccess.ReadWrite
-                        : FileAccess.Read
-                    : _write || _append
-                        ? FileAccess.Write
-                        : throw new InvalidOperationException(
-                            "No file access has been specified." + Environment.NewLine +
-                            "Specify at least one of the following accesses: read, write, append");
-
-            var fileMode =
-                _truncate
-                    ? _append
-                        ? throw new InvalidOperationException("Combining truncate and append makes no sense")
-                        : _write
-                            ? FileMode.Truncate
-                            : throw new InvalidOperationException("Truncate requires write access")
-                    : _createNew
-                        ? _write || _append
-                            ? FileMode.CreateNew
-                            : throw new InvalidOperationException(
-                                "CreateNew requires create or append access, but only had read access")
-                        : _create
-                            ? FileMode.OpenOrCreate
-                            : _append
-                                ? FileMode.Append
-                                : FileMode.Open;
-
-            const FileShare fileShare = FileShare.ReadWrite;
-
-            return new FileOpeningSettings(fileMode, fileAccess, fileShare);
+            return new FileOpeningSettings(GetFileMode(), GetFileAccess(), FileShare.ReadWrite);
         }
+
+        private FileMode GetFileMode()
+            => _truncate
+                ? _append
+                    ? throw new InvalidOperationException("Combining truncate and append makes no sense")
+                    : _write
+                        ? FileMode.Truncate
+                        : throw new InvalidOperationException("Truncate requires write access")
+                : _createNew
+                    ? _write || _append
+                        ? FileMode.CreateNew
+                        : throw new InvalidOperationException("CreateNew requires create or append access, but only had read access")
+                    : _create
+                        ? FileMode.OpenOrCreate
+                        : _append
+                            ? FileMode.Append
+                            : FileMode.Open;
+
+        private FileAccess GetFileAccess()
+            => _read
+                ? _write
+                    ? FileAccess.ReadWrite
+                    : FileAccess.Read
+                : _write || _append
+                    ? FileAccess.Write
+                    : throw new InvalidOperationException($"No file access has been specified. {Environment.NewLine}" +
+                                                          "Specify at least one of the following accesses: read, write, append");
 
         [CustomEqualsInternal]
         [SuppressMessage("Code Quality", "IDE0051")]
