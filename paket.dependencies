@@ -6,3 +6,5 @@ nuget Microsoft.NET.Test.Sdk ~> 15.9
 nuget xunit ~> 2.4
 nuget xunit.runner.visualstudio ~> 2.4
 nuget Messerli.Test.Utility ~> 0.5.0
+nuget Fody ~> 6.1.0, copy_local: true
+nuget Equals.Fody ~> 4.0.1, copy_local: true
