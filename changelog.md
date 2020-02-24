@@ -3,5 +3,5 @@
 ## 0.1.0
 - Initial release
 
-## WIP
+## Unreleased
 - Added `FileOpeningBuilder`
