@@ -16,25 +16,7 @@
         <ProjectReference Include="..\FileSystem\FileSystem.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <None Update="Resources\file.txt">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\FileOpeningBuilderTest\directory\nested_file.txt">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\FileOpeningBuilderTest\hidden_file.txt">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\FileOpeningBuilderTest\readonly_file.txt">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\FileOpeningBuilderTest\regular_file.txt">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\folder\file.txt">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\folder\subfolder\file.txt">
+      <None Update="Resources\**\*.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
