@@ -16,13 +16,7 @@
         <ProjectReference Include="..\FileSystem\FileSystem.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <None Update="Resources\file.txt">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\folder\file.txt">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\folder\subfolder\file.txt">
+      <None Update="Resources\**\*">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
