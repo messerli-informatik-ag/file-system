@@ -1,3 +1,0 @@
-[submodule ".config/code-style"]
-	path = .config/code-style
-	url = https://github.com/messerli-informatik-ag/code-style.git
