@@ -1,6 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<ItemGroup>
-		<PackageReference Include="Messerli.CodeStyle" Version="1.0.0" PrivateAssets="all" />
+		<PackageReference Include="Messerli.CodeStyle" PrivateAssets="all" />
 	</ItemGroup>
 	<PropertyGroup>
 		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
