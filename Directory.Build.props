@@ -2,4 +2,8 @@
 	<ItemGroup>
 		<PackageReference Include="Messerli.CodeStyle" Version="1.0.0" PrivateAssets="all" />
 	</ItemGroup>
+	<PropertyGroup>
+		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+		<DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+	</PropertyGroup>
 </Project>
