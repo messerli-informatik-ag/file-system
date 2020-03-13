@@ -21,5 +21,8 @@
         <Copyright>© Messerli Informatik AG. All rights reserved.</Copyright>
         <PackageTags>filesystem</PackageTags>
     </PropertyGroup>
-    <Import Project="..\.paket\Paket.Restore.targets" />
+    <ItemGroup>
+        <PackageReference Include="Fody" />
+        <PackageReference Include="Equals.Fody" />
+    </ItemGroup>
 </Project>
