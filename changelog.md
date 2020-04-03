@@ -8,3 +8,7 @@ Initial release
 
 ## 0.1.2
 - Add support for .NET Standard 2.0.
+
+## Unreleased
+- `FileOpeningBuilder` now always throws when trying to open an existing file with `CreateNew` enabled.
+  The exception was previously not thrown when `Truncate` was enabled.
