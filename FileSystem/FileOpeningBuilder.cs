@@ -57,7 +57,6 @@ namespace Messerli.FileSystem
         {
             var settings = BuildSettings();
             var fileInfo = new FileInfo(path);
-            ValidateFileDoesNotExistWhenCreateNewIsSet(fileInfo);
             HandleNotNativelySupportedConfigurations(fileInfo);
             return fileInfo.Open(settings.FileMode, settings.FileAccess, settings.FileShare);
         }
@@ -78,16 +77,13 @@ namespace Messerli.FileSystem
                 read ?? _read,
                 createNew ?? _createNew);
 
-        private void ValidateFileDoesNotExistWhenCreateNewIsSet(FileInfo path)
+        private void HandleNotNativelySupportedConfigurations(FileInfo path)
         {
-            if (_createNew && path.Exists)
+            if (_truncate && _createNew && path.Exists)
             {
                 throw new IOException($"The file '{path.FullName}' already exists.");
             }
-        }
 
-        private void HandleNotNativelySupportedConfigurations(FileInfo path)
-        {
             if (_truncate && (_create || _createNew))
             {
                 using (path.Create())
