@@ -544,17 +544,17 @@ namespace Messerli.FileSystem.Test
             }
         }
 
-        public struct TestFileData
+        public readonly struct TestFileData
         {
+            public readonly string Name;
+
+            public readonly string Content;
+
             public TestFileData(string name, string content)
             {
                 Name = name;
                 Content = content;
             }
-
-            public string Name { get; }
-
-            public string Content { get; }
         }
     }
 }
