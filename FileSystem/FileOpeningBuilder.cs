@@ -79,13 +79,11 @@ namespace Messerli.FileSystem
 
         private void HandleNotNativelySupportedConfigurations(FileInfo path)
         {
-            if (!_truncate || (!_create && !_createNew))
+            if (_truncate && (_create || _createNew))
             {
-                return;
-            }
-
-            using (path.Create())
-            {
+                using (path.Create())
+                {
+                }
             }
         }
 
