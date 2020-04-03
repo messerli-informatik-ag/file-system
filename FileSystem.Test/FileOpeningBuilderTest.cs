@@ -382,8 +382,8 @@ namespace Messerli.FileSystem.Test
         [Fact]
         public void CreateNewThrowsWhenFileAlreadyExistsEvenIfTruncateIsSet()
         {
-            using var testEnvironementProvider = CreateTestEnvironmentProvider();
-            var getTestFilePath = SetupTestEnvironment(testEnvironementProvider.RootDirectory);
+            using var testEnvironmentProvider = CreateTestEnvironmentProvider();
+            var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
             var builder = new FileOpeningBuilder()
                 .Write(true)
                 .CreateNew(true)
