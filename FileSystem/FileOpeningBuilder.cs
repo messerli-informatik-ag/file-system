@@ -79,6 +79,11 @@ namespace Messerli.FileSystem
 
         private void HandleNotNativelySupportedConfigurations(FileInfo path)
         {
+            if (_truncate && _createNew && path.Exists)
+            {
+                throw new IOException($"The file '{path.FullName}' already exists.");
+            }
+
             if (_truncate && (_create || _createNew))
             {
                 using (path.Create())
