@@ -379,6 +379,21 @@ namespace Messerli.FileSystem.Test
             Assert.Equal(builderOne, builderTwo);
         }
 
+        [Fact]
+        public void CreateNewThrowsWhenFileAlreadyExistsEvenIfTruncateIsSet()
+        {
+            using var testEnvironementProvider = CreateTestEnvironmentProvider();
+            var getTestFilePath = SetupTestEnvironment(testEnvironementProvider.RootDirectory);
+            var builder = new FileOpeningBuilder()
+                .Write(true)
+                .CreateNew(true)
+                .Truncate(true);
+            Assert.Throws<IOException>(() =>
+            {
+                using var stream = builder.Open(getTestFilePath(RegularFile.Name));
+            });
+        }
+
         public static TheoryData<Func<IFileOpeningBuilder, IFileOpeningBuilder>> Modifiers()
         {
             return new TheoryData<Func<IFileOpeningBuilder, IFileOpeningBuilder>>
