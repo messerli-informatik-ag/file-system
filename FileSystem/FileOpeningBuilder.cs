@@ -79,20 +79,16 @@ namespace Messerli.FileSystem
 
         private void HandleNotNativelySupportedConfigurations(FileInfo path)
         {
-            if (!_truncate || (!_create && !_createNew))
+            if (_truncate && (_create || _createNew))
             {
-                return;
-            }
-
-            using (path.Create())
-            {
+                using (path.Create())
+                {
+                }
             }
         }
 
         private FileOpeningSettings BuildSettings()
-        {
-            return new FileOpeningSettings(GetFileMode(), GetFileAccess(), FileShare.ReadWrite);
-        }
+            => new FileOpeningSettings(GetFileMode(), GetFileAccess(), FileShare.ReadWrite);
 
         private FileMode GetFileMode()
             => _truncate
@@ -132,20 +128,20 @@ namespace Messerli.FileSystem
                _read == other._read &&
                _createNew == other._createNew;
 
-        private struct FileOpeningSettings
+        private readonly struct FileOpeningSettings
         {
+            public readonly FileMode FileMode;
+
+            public readonly FileAccess FileAccess;
+
+            public readonly FileShare FileShare;
+
             public FileOpeningSettings(FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
             {
                 FileMode = fileMode;
                 FileAccess = fileAccess;
                 FileShare = fileShare;
             }
-
-            public FileMode FileMode { get; }
-
-            public FileAccess FileAccess { get; }
-
-            public FileShare FileShare { get; }
         }
     }
 }
