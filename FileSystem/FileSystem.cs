@@ -7,19 +7,13 @@ namespace Messerli.FileSystem
     public sealed class FileSystem : IFileSystem
     {
         public bool Exists(string path)
-        {
-            return ExistsAndIsDirectory(path) || ExistsAndIsFile(path);
-        }
+            => ExistsAndIsDirectory(path) || ExistsAndIsFile(path);
 
         public bool ExistsAndIsDirectory(string path)
-        {
-            return Directory.Exists(path);
-        }
+            => Directory.Exists(path);
 
         public bool ExistsAndIsFile(string path)
-        {
-            return File.Exists(path);
-        }
+            => File.Exists(path);
 
         [SuppressMessage("ReSharper", "ArgumentsStyleLiteral")]
         public void Delete(string path)
@@ -63,19 +57,13 @@ namespace Messerli.FileSystem
         }
 
         public void CreateDirectory(string path)
-        {
-            Directory.CreateDirectory(path);
-        }
+            => Directory.CreateDirectory(path);
 
         public IEnumerable<string> GetFiles(string path)
-        {
-            return Directory.GetFiles(path);
-        }
+            => Directory.GetFiles(path);
 
         public IEnumerable<string> GetFiles(string path, string searchPattern)
-        {
-            return Directory.GetFiles(path, searchPattern);
-        }
+            => Directory.GetFiles(path, searchPattern);
 
         private static void AssertThatSourceAndDestinationAreNotTheSame(string source, string destination)
         {
