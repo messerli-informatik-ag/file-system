@@ -36,22 +36,22 @@ namespace Messerli.FileSystem
         public static bool operator !=(FileOpeningBuilder left, FileOpeningBuilder right) => Operator.Weave(left, right);
 
         [Pure]
-        public IFileOpeningBuilder Create(bool create) => Clone(create: create);
+        public IFileOpeningBuilder Create(bool create = true) => Clone(create: create);
 
         [Pure]
-        public IFileOpeningBuilder Truncate(bool truncate) => Clone(truncate: truncate);
+        public IFileOpeningBuilder Truncate(bool truncate = true) => Clone(truncate: truncate);
 
         [Pure]
-        public IFileOpeningBuilder Append(bool append) => Clone(append: append);
+        public IFileOpeningBuilder Append(bool append = true) => Clone(append: append);
 
         [Pure]
-        public IFileOpeningBuilder Write(bool write) => Clone(write: write);
+        public IFileOpeningBuilder Write(bool write = true) => Clone(write: write);
 
         [Pure]
-        public IFileOpeningBuilder Read(bool read) => Clone(read: read);
+        public IFileOpeningBuilder Read(bool read = true) => Clone(read: read);
 
         [Pure]
-        public IFileOpeningBuilder CreateNew(bool createNew) => Clone(createNew: createNew);
+        public IFileOpeningBuilder CreateNew(bool createNew = true) => Clone(createNew: createNew);
 
         public Stream Open(string path)
         {
