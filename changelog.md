@@ -13,3 +13,6 @@ Initial release
 - `FileOpeningBuilder` now always throws when trying to open an existing file with `CreateNew` enabled.
   The exception was previously not thrown when `Truncate` was enabled.
 - Boolean parameters in `IFileOpeningBuilder` are now optional and default to `true`.
+
+## Unreleased
+- Make boolean parameters in `FileOpeningBuilder` optional too.
