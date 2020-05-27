@@ -14,5 +14,5 @@ Initial release
   The exception was previously not thrown when `Truncate` was enabled.
 - Boolean parameters in `IFileOpeningBuilder` are now optional and default to `true`.
 
-## Unreleased
+## 0.1.4
 - Make boolean parameters in `FileOpeningBuilder` optional too.
