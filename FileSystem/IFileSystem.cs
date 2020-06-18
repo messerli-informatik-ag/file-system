@@ -54,5 +54,12 @@ namespace Messerli.FileSystem
         /// <param name="searchPattern">The search string to match against the names of files in path. This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions.</param>
         /// <returns>An IEnumerable of the full names (including paths) for the files in the specified directory.</returns>
         IEnumerable<string> GetFiles(string path, string searchPattern);
+
+        /// <summary>
+        /// Returns boolean that represents directory is writeable.
+        /// </summary>
+        /// <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
+        /// <returns>A boolean that represents directory is writeable.</returns>
+        bool DirectoryIsWritable(string path);
     }
 }

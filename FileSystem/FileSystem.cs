@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
@@ -25,6 +26,32 @@ namespace Messerli.FileSystem
             else
             {
                 File.Delete(path);
+            }
+        }
+
+        public bool DirectoryIsWritable(string path)
+        {
+            const string magicFileForWriteTesting = ".tmp.todelete";
+
+            if (!ExistsAndIsDirectory(path))
+            {
+                return false;
+            }
+
+            try
+            {
+                var dummyFilePath = Path.Combine(path, magicFileForWriteTesting);
+                using (var file = File.CreateText(dummyFilePath))
+                {
+                    file.WriteLine("test");
+                }
+
+                Delete(dummyFilePath);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
