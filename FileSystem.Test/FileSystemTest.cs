@@ -18,7 +18,7 @@ namespace Messerli.FileSystem.Test
         private static readonly string FileInSubFolder = Path.Combine(SubFolder, "file.txt");
 
         [SkippableFact]
-        public void CheckIsDirectoryWritableOnWindows()
+        public void CheckIsDirectoryWritableReturnsFalseOnWindows()
         {
             Skip.If(Environment.OSVersion.Platform == PlatformID.Unix);
             Skip.If(Environment.OSVersion.Platform == PlatformID.MacOSX);
