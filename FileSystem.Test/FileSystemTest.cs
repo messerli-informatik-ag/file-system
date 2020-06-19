@@ -18,7 +18,7 @@ namespace Messerli.FileSystem.Test
         private static readonly string FileInSubFolder = Path.Combine(SubFolder, "file.txt");
 
         [Fact]
-        public void CheckDirectoryIsWritable()
+        public void CheckIsDirectoryWritableOnWindows()
         {
             if (Environment.OSVersion.Platform == PlatformID.Unix ||
                 Environment.OSVersion.Platform == PlatformID.MacOSX)
@@ -32,12 +32,12 @@ namespace Messerli.FileSystem.Test
             var denyAllRule = new FileSystemAccessRule(windowsIdentity.Name, FileSystemRights.FullControl, AccessControlType.Deny);
             var path = Path.Combine(testEnvironment.RootDirectory, Folder);
             var directoryInfo = new DirectoryInfo(path);
-            Assert.True(filesystem.DirectoryIsWritable(path));
+            Assert.True(filesystem.IsDirectoryWritable(path));
 
             var security = directoryInfo.GetAccessControl();
             security.AddAccessRule(denyAllRule);
             directoryInfo.SetAccessControl(security);
-            var isWritable = filesystem.DirectoryIsWritable(path);
+            var isWritable = filesystem.IsDirectoryWritable(path);
             Assert.False(isWritable);
 
             security.RemoveAccessRule(denyAllRule);

@@ -60,6 +60,6 @@ namespace Messerli.FileSystem
         /// </summary>
         /// <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
         /// <returns>A boolean that represents directory is writeable.</returns>
-        bool DirectoryIsWritable(string path);
+        bool IsDirectoryWritable(string path);
     }
 }

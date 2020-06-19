@@ -29,7 +29,7 @@ namespace Messerli.FileSystem
             }
         }
 
-        public bool DirectoryIsWritable(string path)
+        public bool IsDirectoryWritable(string path)
         {
             const string magicFileForWriteTesting = ".tmp.todelete";
 
