@@ -55,11 +55,7 @@ namespace Messerli.FileSystem
         /// <returns>An IEnumerable of the full names (including paths) for the files in the specified directory.</returns>
         IEnumerable<string> GetFiles(string path, string searchPattern);
 
-        /// <summary>
-        /// Returns boolean that represents directory is writeable.
-        /// </summary>
         /// <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
-        /// <returns>A boolean that represents directory is writeable.</returns>
         bool IsDirectoryWritable(string path);
     }
 }
