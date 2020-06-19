@@ -17,14 +17,11 @@ namespace Messerli.FileSystem.Test
         private static readonly string FileInFolder = Path.Combine(Folder, "file.txt");
         private static readonly string FileInSubFolder = Path.Combine(SubFolder, "file.txt");
 
-        [Fact]
+        [SkippableFact]
         public void CheckIsDirectoryWritableOnWindows()
         {
-            if (Environment.OSVersion.Platform == PlatformID.Unix ||
-                Environment.OSVersion.Platform == PlatformID.MacOSX)
-            {
-                return;
-            }
+            Skip.If(Environment.OSVersion.Platform == PlatformID.Unix);
+            Skip.If(Environment.OSVersion.Platform == PlatformID.MacOSX);
 
             var filesystem = CreateFileSystem();
             using var testEnvironment = CreateTestEnvironmentProvider();
