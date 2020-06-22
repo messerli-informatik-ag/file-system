@@ -16,3 +16,6 @@ Initial release
 
 ## 0.1.4
 - Make boolean parameters in `FileOpeningBuilder` optional too.
+
+## 0.1.5
+- Now you can use `FileSystem` to test whether a directory is writeable or not (`DirectoryIsWritable`). A dummy file is created for this purpose in the given path.

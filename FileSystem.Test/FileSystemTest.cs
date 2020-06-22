@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using Messerli.Test.Utility;
 using Xunit;
 
@@ -13,6 +16,30 @@ namespace Messerli.FileSystem.Test
         private static readonly string SubFolder = Path.Combine(Folder, "subfolder");
         private static readonly string FileInFolder = Path.Combine(Folder, "file.txt");
         private static readonly string FileInSubFolder = Path.Combine(SubFolder, "file.txt");
+
+        [SkippableFact]
+        public void CheckIsDirectoryWritableReturnsFalseOnWindows()
+        {
+            Skip.If(Environment.OSVersion.Platform == PlatformID.Unix);
+            Skip.If(Environment.OSVersion.Platform == PlatformID.MacOSX);
+
+            var filesystem = CreateFileSystem();
+            using var testEnvironment = CreateTestEnvironmentProvider();
+            using var windowsIdentity = WindowsIdentity.GetCurrent();
+            var denyAllRule = new FileSystemAccessRule(windowsIdentity.Name, FileSystemRights.FullControl, AccessControlType.Deny);
+            var path = Path.Combine(testEnvironment.RootDirectory, Folder);
+            var directoryInfo = new DirectoryInfo(path);
+            Assert.True(filesystem.IsDirectoryWritable(path));
+
+            var security = directoryInfo.GetAccessControl();
+            security.AddAccessRule(denyAllRule);
+            directoryInfo.SetAccessControl(security);
+            var isWritable = filesystem.IsDirectoryWritable(path);
+            Assert.False(isWritable);
+
+            security.RemoveAccessRule(denyAllRule);
+            directoryInfo.SetAccessControl(security);
+        }
 
         [Theory]
         [MemberData(nameof(ChecksIfPathExistsData))]
