@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Messerli.FileSystem
 {
@@ -43,16 +43,19 @@ namespace Messerli.FileSystem
         /// <summary>
         /// Returns the names of subdirectories (including their paths) in the specified directory.
         /// </summary>
-        /// <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
+        /// <param name="path">The relative or absolute path to the directory to search. This string is case-sensitive.</param>
         /// <returns>An IEnumerable of the full names (including paths) of subdirectories in the specified path, or an empty array if no directories are found.</returns>
         IEnumerable<string> GetFiles(string path);
 
         /// <summary>
         /// Returns the names of files(including their paths) that match the specified search pattern in the specified directory.
         /// </summary>
-        /// <param name="path">The relative or absolute path to the directory to search. This string is not case-sensitive.</param>
+        /// <param name="path">The relative or absolute path to the directory to search. This string is case-sensitive.</param>
         /// <param name="searchPattern">The search string to match against the names of files in path. This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions.</param>
         /// <returns>An IEnumerable of the full names (including paths) for the files in the specified directory.</returns>
         IEnumerable<string> GetFiles(string path, string searchPattern);
+
+        /// <param name="path">The relative or absolute path to the directory to search. This string is case-sensitive.</param>
+        bool IsDirectoryWritable(string path);
     }
 }
