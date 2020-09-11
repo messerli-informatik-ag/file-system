@@ -13,9 +13,7 @@ namespace Messerli.FileSystem
         }
 
         public FileOpeningBuilderStub(Func<Stream> createStream)
-        {
-            _createStream = createStream;
-        }
+            => _createStream = createStream;
 
         public IFileOpeningBuilder Create(bool create = true) => this;
 
