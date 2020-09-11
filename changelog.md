@@ -23,3 +23,10 @@ Initial release
 ## 0.1.6
 - Add documentation for `IFileOpeningBuilder`.
 - Add stub for `IFileOpeningBuilder`: `FileOpeningBuilderStub`.
+
+## 0.1.7
+- `FileOpeningBuilderStub` now optionally accepts a custom factory for creating a stream:
+   ```csharp
+   using var memoryStream = new MemoryStream();
+   var fileOpeningBuilder = new FileOpeningBuilderStub(memoryStream.Borrow);
+   ```
