@@ -461,10 +461,10 @@ namespace Messerli.FileSystem.Test
 
             var fileToAttributes = new Dictionary<string, FileAttributes>
             {
-                { RegularFile.Name, FileAttributes.Normal },
-                { ReadOnlyFile.Name, FileAttributes.ReadOnly },
-                { HiddenFile.Name, FileAttributes.Hidden },
-                { SubDirectoryName, FileAttributes.Directory },
+                [RegularFile.Name] = FileAttributes.Normal,
+                [ReadOnlyFile.Name] = FileAttributes.ReadOnly,
+                [HiddenFile.Name] = FileAttributes.Hidden,
+                [SubDirectoryName] = FileAttributes.Directory,
             };
 
             foreach (var (file, attributes) in fileToAttributes)
