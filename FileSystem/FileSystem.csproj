@@ -19,4 +19,7 @@
         <Copyright>© Messerli Informatik AG. All rights reserved.</Copyright>
         <PackageTags>filesystem</PackageTags>
     </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Funcky" />
+    </ItemGroup>
 </Project>
