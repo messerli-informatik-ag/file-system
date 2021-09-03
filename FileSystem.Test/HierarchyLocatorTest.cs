@@ -14,7 +14,7 @@ namespace Messerli.FileSystem.Test
         private const string SubDirectoryName = "Directory";
 
         [Fact]
-        public void FindFirstDirectoryContainingFile_FileInStartingDirectory_ReturnsStartingDirectory()
+        public void ReturnsStartingDirectoryIfFileIsFoundInStartingDirectory()
         {
             using var tempDirectory = new TempDirectoryBuilder().Create();
             var startingDirectory = tempDirectory.FullName;
@@ -28,7 +28,7 @@ namespace Messerli.FileSystem.Test
 
         [Theory]
         [MemberData(nameof(DirectorySeparators))]
-        public void FindFirstDirectoryContainingFile_FileNameContainingDirectorySeparator_ThrowsException(char separator)
+        public void ThrowsExceptionIfFileContainsInvalidCharacters(char separator)
         {
             using var tempDirectory = new TempDirectoryBuilder().Create();
             var fileName = $"foo{separator}bar";
@@ -38,7 +38,7 @@ namespace Messerli.FileSystem.Test
         }
 
         [Fact]
-        public void FindFirstDirectoryContainingFile_EmptyFileName_ThrowsException()
+        public void ThrowsExceptionWhenFileNameIsEmpty()
         {
             using var tempDirectory = new TempDirectoryBuilder().Create();
             var locator = new HierarchyLocator();
@@ -47,7 +47,7 @@ namespace Messerli.FileSystem.Test
         }
 
         [Fact]
-        public void FindFirstDirectoryContainingFile_NonExistentFile_ReturnsNone()
+        public void ReturnsNoneIfFileIsNotFoundInAnyParentDirectory()
         {
             var fileName = $"non_existent_file_{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.txt";
             using var tempDirectory = new TempDirectoryBuilder().Create();
@@ -68,7 +68,7 @@ namespace Messerli.FileSystem.Test
         [InlineData(3)]
         [InlineData(10)]
         [InlineData(50)]
-        public void FindFirstDirectoryContainingFile_FileInDirectoryAboveStartingDirectory_ReturnsDirectory(int level)
+        public void ReturnsFirstDirectoryContainingFile(int level)
         {
             using var tempDirectory = new TempDirectoryBuilder().Create();
             var startingDirectory = Path.Combine(tempDirectory.FullName, GenerateNestedPath(level));
