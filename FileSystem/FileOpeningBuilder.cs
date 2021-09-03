@@ -1,14 +1,10 @@
-#pragma warning disable 660,661
-
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.IO;
 
 namespace Messerli.FileSystem
 {
-    [Equals]
-    public class FileOpeningBuilder : IFileOpeningBuilder
+    public record FileOpeningBuilder : IFileOpeningBuilder
     {
         private readonly bool _create;
         private readonly bool _truncate;
@@ -31,27 +27,23 @@ namespace Messerli.FileSystem
             _createNew = createNew;
         }
 
-        public static bool operator ==(FileOpeningBuilder left, FileOpeningBuilder right) => Operator.Weave(left, right);
-
-        public static bool operator !=(FileOpeningBuilder left, FileOpeningBuilder right) => Operator.Weave(left, right);
+        [Pure]
+        public IFileOpeningBuilder Create(bool create = true) => ShallowClone(create: create);
 
         [Pure]
-        public IFileOpeningBuilder Create(bool create = true) => Clone(create: create);
+        public IFileOpeningBuilder Truncate(bool truncate = true) => ShallowClone(truncate: truncate);
 
         [Pure]
-        public IFileOpeningBuilder Truncate(bool truncate = true) => Clone(truncate: truncate);
+        public IFileOpeningBuilder Append(bool append = true) => ShallowClone(append: append);
 
         [Pure]
-        public IFileOpeningBuilder Append(bool append = true) => Clone(append: append);
+        public IFileOpeningBuilder Write(bool write = true) => ShallowClone(write: write);
 
         [Pure]
-        public IFileOpeningBuilder Write(bool write = true) => Clone(write: write);
+        public IFileOpeningBuilder Read(bool read = true) => ShallowClone(read: read);
 
         [Pure]
-        public IFileOpeningBuilder Read(bool read = true) => Clone(read: read);
-
-        [Pure]
-        public IFileOpeningBuilder CreateNew(bool createNew = true) => Clone(createNew: createNew);
+        public IFileOpeningBuilder CreateNew(bool createNew = true) => ShallowClone(createNew: createNew);
 
         public Stream Open(string path)
         {
@@ -62,7 +54,7 @@ namespace Messerli.FileSystem
         }
 
         [Pure]
-        private IFileOpeningBuilder Clone(
+        private IFileOpeningBuilder ShallowClone(
             bool? create = null,
             bool? truncate = null,
             bool? append = null,
@@ -121,17 +113,6 @@ namespace Messerli.FileSystem
                     ? FileAccess.Write
                     : throw new InvalidOperationException($"No file access has been specified. {Environment.NewLine}" +
                                                           "Specify at least one of the following accesses: read, write, append");
-
-        [CustomEqualsInternal]
-        [SuppressMessage("Code Quality", "IDE0051")]
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        private bool CustomEquals(FileOpeningBuilder other)
-            => _create == other._create &&
-               _truncate == other._truncate &&
-               _append == other._append &&
-               _write == other._write &&
-               _read == other._read &&
-               _createNew == other._createNew;
 
         private readonly struct FileOpeningSettings
         {
