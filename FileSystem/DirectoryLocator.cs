@@ -1,5 +1,10 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Funcky;
+using Funcky.Extensions;
 using Funcky.Monads;
 
 namespace Messerli.FileSystem
@@ -21,15 +26,15 @@ namespace Messerli.FileSystem
             return FindFirstDirectoryContainingFileWithCanonicalizedPath(fileName, Path.GetFullPath(startingDirectory));
         }
 
-        private Option<string> FindFirstDirectoryContainingFileWithCanonicalizedPath(string fileName, string startingDirectory)
-            => Option.Some(startingDirectory)
-                .Where(path => File.Exists(Path.Combine(path, fileName)))
-                .OrElse(() => FindFirstParentDirectoryContainingFile(fileName, startingDirectory));
+        private static Option<string> FindFirstDirectoryContainingFileWithCanonicalizedPath(string fileName, string startingDirectory)
+            => Sequence.Return(startingDirectory)
+                .Concat(ParentDirectories(startingDirectory))
+                .FirstOrNone(DirectoryContainsFile(fileName));
 
-        private Option<string> FindFirstParentDirectoryContainingFile(string fileName, string startingDirectory)
-            => GetParent(startingDirectory)
-                .SelectMany(parent => FindFirstDirectoryContainingFileWithCanonicalizedPath(fileName, parent));
+        private static Func<string, bool> DirectoryContainsFile(string fileName)
+            => directoryPath => File.Exists(Path.Combine(directoryPath, fileName));
 
-        private static Option<string> GetParent(string path) => Option.FromNullable(Path.GetDirectoryName(path));
+        private static IEnumerable<string> ParentDirectories(string path)
+            => Sequence.Generate(path, p => Option.FromNullable(Path.GetDirectoryName(p)));
     }
 }
