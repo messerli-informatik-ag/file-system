@@ -53,7 +53,7 @@ namespace Messerli.FileSystem.Test
             Assert.Throws<FileNotFoundException>(() =>
             {
                 using (new FileOpeningBuilder()
-                    .Read(true)
+                    .Read()
                     .Open(file))
                 {
                 }
@@ -76,8 +76,8 @@ namespace Messerli.FileSystem.Test
             using var testEnvironmentProvider = CreateTestEnvironmentProvider();
             var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
             var builder = new FileOpeningBuilder()
-                .Read(true)
-                .Write(true);
+                .Read()
+                .Write();
             AssertThatFileContains(builder, getTestFilePath(testFileData.Name), testFileData.Content);
         }
 
@@ -89,7 +89,7 @@ namespace Messerli.FileSystem.Test
             Assert.Throws<UnauthorizedAccessException>(() =>
             {
                 using (new FileOpeningBuilder()
-                    .Write(true)
+                    .Write()
                     .Open(getTestFilePath(ReadOnlyFile.Name)))
                 {
                 }
@@ -101,7 +101,7 @@ namespace Messerli.FileSystem.Test
         public void WritingOnExistingFileOverwritesContents(TestFileData testFileData)
         {
             var builder = new FileOpeningBuilder()
-                .Write(true);
+                .Write();
             AssertThatFileContainsWrittenContent(builder, testFileData, ContentToWrite);
         }
 
@@ -112,8 +112,8 @@ namespace Messerli.FileSystem.Test
             using var testEnvironmentProvider = CreateTestEnvironmentProvider();
             var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
             using var stream = new FileOpeningBuilder()
-                .Read(true)
-                .Write(true)
+                .Read()
+                .Write()
                 .Open(getTestFilePath(testFileData.Name));
             var bytes = System.Text.Encoding.UTF8.GetBytes(ContentToWrite);
             stream.Write(bytes);
@@ -129,7 +129,7 @@ namespace Messerli.FileSystem.Test
             using var testEnvironmentProvider = CreateTestEnvironmentProvider();
             var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
             using (new FileOpeningBuilder()
-                .Write(true)
+                .Write()
                 .Open(getTestFilePath(testFileData.Name)))
             {
             }
@@ -145,7 +145,7 @@ namespace Messerli.FileSystem.Test
             Assert.Throws<InvalidOperationException>(() =>
             {
                 using (new FileOpeningBuilder()
-                    .Create(true)
+                    .Create()
                     .Open(getTestFilePath(NonExistentFile.Name)))
                 {
                 }
@@ -157,8 +157,8 @@ namespace Messerli.FileSystem.Test
         public void WritingToFileWithCreateAndWriteOverwritesFile(TestFileData testFileData)
         {
             var builder = new FileOpeningBuilder()
-                .Write(true)
-                .Create(true);
+                .Write()
+                .Create();
             AssertThatFileContainsWrittenContent(builder, testFileData, ContentToWrite);
         }
 
@@ -166,8 +166,8 @@ namespace Messerli.FileSystem.Test
         public void CreatesAndWritesNewFile()
         {
             var builder = new FileOpeningBuilder()
-                .Write(true)
-                .Create(true);
+                .Write()
+                .Create();
             AssertThatFileContainsWrittenContent(builder, NonExistentFile, ContentToWrite);
         }
 
@@ -177,8 +177,8 @@ namespace Messerli.FileSystem.Test
             using var testEnvironmentProvider = CreateTestEnvironmentProvider();
             var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
             var builder = new FileOpeningBuilder()
-                .Read(true)
-                .Create(true);
+                .Read()
+                .Create();
             AssertThatFileContains(builder, getTestFilePath(NonExistentFile.Name), string.Empty);
         }
 
@@ -189,7 +189,7 @@ namespace Messerli.FileSystem.Test
             using var testEnvironmentProvider = CreateTestEnvironmentProvider();
             var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
             using (var stream = new FileOpeningBuilder()
-                .Append(true)
+                .Append()
                 .Open(getTestFilePath(testFileData.Name)))
             {
                 var bytes = System.Text.Encoding.UTF8.GetBytes(ContentToWrite);
@@ -208,7 +208,7 @@ namespace Messerli.FileSystem.Test
             Assert.Throws<UnauthorizedAccessException>(() =>
             {
                 using (new FileOpeningBuilder()
-                    .Append(true)
+                    .Append()
                     .Open(getTestFilePath(ReadOnlyFile.Name)))
                 {
                 }
@@ -224,8 +224,8 @@ namespace Messerli.FileSystem.Test
             Assert.Throws<IOException>(() =>
             {
                 using (new FileOpeningBuilder()
-                    .CreateNew(true)
-                    .Write(true)
+                    .CreateNew()
+                    .Write()
                     .Open(getTestFilePath(testFileData.Name)))
                 {
                 }
@@ -240,8 +240,8 @@ namespace Messerli.FileSystem.Test
             Assert.Throws<InvalidOperationException>(() =>
             {
                 using (new FileOpeningBuilder()
-                    .CreateNew(true)
-                    .Read(true)
+                    .CreateNew()
+                    .Read()
                     .Open(getTestFilePath(NonExistentFile.Name)))
                 {
                 }
@@ -252,8 +252,8 @@ namespace Messerli.FileSystem.Test
         public void ForceCreatesAndWritesFile()
         {
             var builder = new FileOpeningBuilder()
-                .Write(true)
-                .CreateNew(true);
+                .Write()
+                .CreateNew();
             AssertThatFileContainsWrittenContent(builder, NonExistentFile, ContentToWrite);
         }
 
@@ -261,11 +261,11 @@ namespace Messerli.FileSystem.Test
         public void ForceCreatesAndWritesFileWhenUsingRedundantConfigurations()
         {
             var builder = new FileOpeningBuilder()
-                .Read(true)
-                .Write(true)
-                .Create(true)
-                .Truncate(true)
-                .CreateNew(true);
+                .Read()
+                .Write()
+                .Create()
+                .Truncate()
+                .CreateNew();
             AssertThatFileContainsWrittenContent(builder, NonExistentFile, ContentToWrite);
         }
 
@@ -276,8 +276,8 @@ namespace Messerli.FileSystem.Test
             using var testEnvironmentProvider = CreateTestEnvironmentProvider();
             var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
             using (new FileOpeningBuilder()
-                .Write(true)
-                .Truncate(true)
+                .Write()
+                .Truncate()
                 .Open(getTestFilePath(testFileData.Name)))
             {
             }
@@ -292,9 +292,9 @@ namespace Messerli.FileSystem.Test
             using var testEnvironmentProvider = CreateTestEnvironmentProvider();
             var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
             var builder = new FileOpeningBuilder()
-                .Write(true)
-                .Read(true)
-                .Truncate(true);
+                .Write()
+                .Read()
+                .Truncate();
             AssertThatFileContains(builder, getTestFilePath(testFileData.Name), string.Empty);
         }
 
@@ -307,8 +307,8 @@ namespace Messerli.FileSystem.Test
             Assert.Throws<InvalidOperationException>(() =>
             {
                 using (new FileOpeningBuilder()
-                    .Truncate(true)
-                    .Read(true)
+                    .Truncate()
+                    .Read()
                     .Open(getTestFilePath(testFileData.Name)))
                 {
                 }
@@ -323,8 +323,8 @@ namespace Messerli.FileSystem.Test
             Assert.Throws<UnauthorizedAccessException>(() =>
             {
                 using (new FileOpeningBuilder()
-                    .Truncate(true)
-                    .Write(true)
+                    .Truncate()
+                    .Write()
                     .Open(getTestFilePath(ReadOnlyFile.Name)))
                 {
                 }
@@ -341,8 +341,8 @@ namespace Messerli.FileSystem.Test
             {
                 using (
                     new FileOpeningBuilder()
-                        .Truncate(true)
-                        .Append(true)
+                        .Truncate()
+                        .Append()
                         .Open(getTestFilePath(testFileData.Name)))
                 {
                 }
@@ -355,9 +355,9 @@ namespace Messerli.FileSystem.Test
             using var testEnvironmentProvider = CreateTestEnvironmentProvider();
             SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
             var builder = new FileOpeningBuilder()
-                .Write(true)
-                .Create(true)
-                .Truncate(true);
+                .Write()
+                .Create()
+                .Truncate();
             AssertThatFileContainsWrittenContent(builder, NonExistentFile, ContentToWrite);
         }
 
@@ -385,9 +385,9 @@ namespace Messerli.FileSystem.Test
             using var testEnvironmentProvider = CreateTestEnvironmentProvider();
             var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
             var builder = new FileOpeningBuilder()
-                .Write(true)
-                .CreateNew(true)
-                .Truncate(true);
+                .Write()
+                .CreateNew()
+                .Truncate();
             Assert.Throws<IOException>(() =>
             {
                 using var stream = builder.Open(getTestFilePath(RegularFile.Name));
@@ -398,12 +398,12 @@ namespace Messerli.FileSystem.Test
         {
             return new TheoryData<Func<IFileOpeningBuilder, IFileOpeningBuilder>>
             {
-                b => b.Create(true),
-                b => b.Truncate(true),
-                b => b.Append(true),
-                b => b.Write(true),
-                b => b.Read(true),
-                b => b.CreateNew(true),
+                b => b.Create(),
+                b => b.Truncate(),
+                b => b.Append(),
+                b => b.Write(),
+                b => b.Read(),
+                b => b.CreateNew(),
             };
         }
 
@@ -441,7 +441,7 @@ namespace Messerli.FileSystem.Test
 
         private static void AssertThatFileContains(string path, string expectedContent)
         {
-            var builder = new FileOpeningBuilder().Read(true);
+            var builder = new FileOpeningBuilder().Read();
             AssertThatFileContains(builder, path, expectedContent);
         }
 
