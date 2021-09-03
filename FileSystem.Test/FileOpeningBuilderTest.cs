@@ -352,8 +352,8 @@ namespace Messerli.FileSystem.Test
         [Fact]
         public void TruncatedNewFileCanBeWrittenTo()
         {
-            using var testEnvironementProvider = CreateTestEnvironmentProvider();
-            SetupTestEnvironment(testEnvironementProvider.RootDirectory);
+            using var testEnvironmentProvider = CreateTestEnvironmentProvider();
+            SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
             var builder = new FileOpeningBuilder()
                 .Write(true)
                 .Create(true)
@@ -427,8 +427,8 @@ namespace Messerli.FileSystem.Test
             TestFileData testFileData,
             string contentToWrite)
         {
-            using var testEnvironementProvider = CreateTestEnvironmentProvider();
-            var getTestFilePath = SetupTestEnvironment(testEnvironementProvider.RootDirectory);
+            using var testEnvironmentProvider = CreateTestEnvironmentProvider();
+            var getTestFilePath = SetupTestEnvironment(testEnvironmentProvider.RootDirectory);
             using (var stream = fileOpeningBuilder
                 .Open(getTestFilePath(testFileData.Name)))
             {
