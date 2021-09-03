@@ -467,7 +467,7 @@ namespace Messerli.FileSystem.Test
 
             foreach (var (file, attributes) in fileToAttributes)
             {
-                var fileInfo = new FileInfo(getTestFile(file))
+                _ = new FileInfo(getTestFile(file))
                 {
                     Attributes = attributes,
                 };
