@@ -30,3 +30,7 @@ Initial release
    using var memoryStream = new MemoryStream();
    var fileOpeningBuilder = new FileOpeningBuilderStub(memoryStream.Borrow);
    ```
+
+## 0.1.8
+* Add a new helper function `IHierarchyLocator.FindClosestParentDirectoryContainingFile`
+  that finds the closest directory that contains a file with the given name.
