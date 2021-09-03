@@ -41,7 +41,7 @@ namespace Messerli.FileSystem
         void CreateDirectory(string path);
 
         /// <summary>
-        /// Returns the names of subdirectories (including their paths) in the specified directory.
+        /// Returns the names of files (including their paths) in the specified directory.
         /// </summary>
         /// <param name="path">The relative or absolute path to the directory to search. This string is case-sensitive.</param>
         /// <returns>An IEnumerable of the full names (including paths) of subdirectories in the specified path, or an empty array if no directories are found.</returns>
