@@ -395,8 +395,7 @@ namespace Messerli.FileSystem.Test
         }
 
         public static TheoryData<Func<IFileOpeningBuilder, IFileOpeningBuilder>> Modifiers()
-        {
-            return new TheoryData<Func<IFileOpeningBuilder, IFileOpeningBuilder>>
+            => new TheoryData<Func<IFileOpeningBuilder, IFileOpeningBuilder>>
             {
                 b => b.Create(),
                 b => b.Truncate(),
@@ -405,7 +404,6 @@ namespace Messerli.FileSystem.Test
                 b => b.Read(),
                 b => b.CreateNew(),
             };
-        }
 
         public static IEnumerable<object[]> GetReadableFiles()
         {
@@ -485,22 +483,18 @@ namespace Messerli.FileSystem.Test
         }
 
         private static GetTestFile CreateGetTestFilePath(string root)
-        {
-            return fileName => Path.Combine(root, DirectoryName, fileName);
-        }
+            => fileName => Path.Combine(root, DirectoryName, fileName);
 
         private static IEnumerable<TestFile> CreateTestFiles()
-        {
-            return new[]
-                {
-                    RegularFile.Name,
-                    ReadOnlyFile.Name,
-                    HiddenFile.Name,
-                    NestedFile.Name,
-                }
-                .Select(fileName => Path.Combine(DirectoryName, fileName))
-                .Select(path => new TestFile(path, path));
-        }
+            => new[]
+            {
+                RegularFile.Name,
+                ReadOnlyFile.Name,
+                HiddenFile.Name,
+                NestedFile.Name,
+            }
+            .Select(fileName => Path.Combine(DirectoryName, fileName))
+            .Select(path => new TestFile(path, path));
 
         private static string ReadStream(Stream stream)
         {
