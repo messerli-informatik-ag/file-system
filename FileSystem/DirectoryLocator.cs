@@ -23,8 +23,15 @@ namespace Messerli.FileSystem
                 throw new ArgumentException("File name should not be empty", nameof(fileName));
             }
 
-            return FindFirstDirectoryContainingFileWithCanonicalizedPath(fileName, Path.GetFullPath(startingDirectory));
+            return FindFirstDirectoryContainingFileWithCanonicalizedPath(fileName, CanonicalizePath(startingDirectory));
         }
+
+        // We trim trailing directory separator chars because Path.GetDirectoryName
+        // doesn't return the real parent directory for paths with trailing directory separators
+        // it simply pops off the last separator. This doesn't break our search algorithm, but
+        // results in unnecessary File.Exists checks.
+        private static string CanonicalizePath(string path)
+            => Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar);
 
         private static Option<string> FindFirstDirectoryContainingFileWithCanonicalizedPath(string fileName, string startingDirectory)
             => Sequence.Return(startingDirectory)
