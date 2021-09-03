@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
     <PropertyGroup>
-        <Version>0.1.7</Version>
+        <Version>0.1.8</Version>
         <RootNamespace>Messerli.FileSystem</RootNamespace>
         <AssemblyName>Messerli.FileSystem</AssemblyName>
     </PropertyGroup>
@@ -18,5 +18,10 @@
         <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
         <Copyright>© Messerli Informatik AG. All rights reserved.</Copyright>
         <PackageTags>filesystem</PackageTags>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Funcky" />
+    </ItemGroup>
 </Project>
