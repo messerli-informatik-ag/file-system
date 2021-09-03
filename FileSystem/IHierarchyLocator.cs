@@ -5,9 +5,9 @@ namespace Messerli.FileSystem
 {
     public interface IHierarchyLocator
     {
-        /// <summary>Returns the first directory, starting with the <paramref name="startingDirectory"/>
+        /// <summary>Returns the closest parent directory, starting with the <paramref name="startingDirectory"/>
         /// containing a file with the given <paramref name="fileName"/>.</summary>
         /// <exception cref="ArgumentException">Thrown when <paramref name="fileName"/> contains invalid characters or is empty.</exception>
-        Option<string> FindFirstDirectoryContainingFile(string fileName, string startingDirectory);
+        Option<string> FindClosestParentDirectoryContainingFile(string fileName, string startingDirectory);
     }
 }

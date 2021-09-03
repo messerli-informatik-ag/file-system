@@ -21,7 +21,7 @@ namespace Messerli.FileSystem.Test
             File.WriteAllText(Path.Combine(startingDirectory, FileName), string.Empty);
 
             var locator = new HierarchyLocator();
-            var directory = locator.FindFirstDirectoryContainingFile(FileName, startingDirectory);
+            var directory = locator.FindClosestParentDirectoryContainingFile(FileName, startingDirectory);
 
             FunctionalAssert.IsSome(startingDirectory, directory);
         }
@@ -34,7 +34,7 @@ namespace Messerli.FileSystem.Test
             var fileName = $"foo{separator}bar";
             var locator = new HierarchyLocator();
             Assert.Throws<ArgumentException>(() =>
-                locator.FindFirstDirectoryContainingFile(fileName, tempDirectory.FullName));
+                locator.FindClosestParentDirectoryContainingFile(fileName, tempDirectory.FullName));
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace Messerli.FileSystem.Test
             using var tempDirectory = new TempDirectoryBuilder().Create();
             var locator = new HierarchyLocator();
             Assert.Throws<ArgumentException>(() =>
-                locator.FindFirstDirectoryContainingFile(string.Empty, tempDirectory.FullName));
+                locator.FindClosestParentDirectoryContainingFile(string.Empty, tempDirectory.FullName));
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Messerli.FileSystem.Test
             var fileName = $"non_existent_file_{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.txt";
             using var tempDirectory = new TempDirectoryBuilder().Create();
             var locator = new HierarchyLocator();
-            FunctionalAssert.IsNone(locator.FindFirstDirectoryContainingFile(fileName, tempDirectory.FullName));
+            FunctionalAssert.IsNone(locator.FindClosestParentDirectoryContainingFile(fileName, tempDirectory.FullName));
         }
 
         public static TheoryData<char> DirectorySeparators()
@@ -76,7 +76,7 @@ namespace Messerli.FileSystem.Test
             File.WriteAllText(Path.Combine(tempDirectory.FullName, FileName), string.Empty);
 
             var locator = new HierarchyLocator();
-            var directory = locator.FindFirstDirectoryContainingFile(FileName, startingDirectory);
+            var directory = locator.FindClosestParentDirectoryContainingFile(FileName, startingDirectory);
 
             FunctionalAssert.IsSome(tempDirectory.FullName, directory);
         }

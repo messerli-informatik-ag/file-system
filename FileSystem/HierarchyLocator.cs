@@ -22,7 +22,7 @@ namespace Messerli.FileSystem
             _fileSystem = fileSystem;
         }
 
-        public Option<string> FindFirstDirectoryContainingFile(string fileName, string startingDirectory)
+        public Option<string> FindClosestParentDirectoryContainingFile(string fileName, string startingDirectory)
         {
             if (Path.GetInvalidFileNameChars().Any(fileName.Contains))
             {
