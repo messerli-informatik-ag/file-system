@@ -42,6 +42,9 @@ namespace Messerli.FileSystem
             => directoryPath => File.Exists(Path.Combine(directoryPath, fileName));
 
         private static IEnumerable<string> ParentDirectories(string path)
-            => Sequence.Generate(path, p => Option.FromNullable(Path.GetDirectoryName(p)));
+            => Sequence.Generate(path, GetDirectoryNameOrNone);
+
+        private static Option<string> GetDirectoryNameOrNone(string path)
+            => Option.FromNullable(Path.GetDirectoryName(path));
     }
 }
