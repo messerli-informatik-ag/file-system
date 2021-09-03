@@ -6,11 +6,9 @@
     </PropertyGroup>
     <PropertyGroup>
         <IsPackable>false</IsPackable>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
-        <LangVersion>8.0</LangVersion>
+        <TargetFramework>net5.0</TargetFramework>
+        <LangVersion>9.0</LangVersion>
         <Nullable>enable</Nullable>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\FileSystem\FileSystem.csproj" />
