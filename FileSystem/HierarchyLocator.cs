@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,8 +8,20 @@ using Funcky.Monads;
 
 namespace Messerli.FileSystem
 {
-    public sealed class DirectoryLocator : IDirectoryLocator
+    public sealed class HierarchyLocator : IHierarchyLocator
     {
+        private readonly IFileSystem _fileSystem;
+
+        public HierarchyLocator()
+            : this(new FileSystem())
+        {
+        }
+
+        public HierarchyLocator(IFileSystem fileSystem)
+        {
+            _fileSystem = fileSystem;
+        }
+
         public Option<string> FindFirstDirectoryContainingFile(string fileName, string startingDirectory)
         {
             if (Path.GetInvalidFileNameChars().Any(fileName.Contains))
@@ -33,13 +44,13 @@ namespace Messerli.FileSystem
         private static string CanonicalizePath(string path)
             => Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar);
 
-        private static Option<string> FindFirstDirectoryContainingFileWithCanonicalizedPath(string fileName, string startingDirectory)
+        private Option<string> FindFirstDirectoryContainingFileWithCanonicalizedPath(string fileName, string startingDirectory)
             => Sequence.Return(startingDirectory)
                 .Concat(ParentDirectories(startingDirectory))
                 .FirstOrNone(DirectoryContainsFile(fileName));
 
-        private static Func<string, bool> DirectoryContainsFile(string fileName)
-            => directoryPath => File.Exists(Path.Combine(directoryPath, fileName));
+        private Func<string, bool> DirectoryContainsFile(string fileName)
+            => directoryPath => _fileSystem.ExistsAndIsFile(Path.Combine(directoryPath, fileName));
 
         private static IEnumerable<string> ParentDirectories(string path)
             => Sequence.Generate(path, GetDirectoryNameOrNone);

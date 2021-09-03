@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Messerli.FileSystem.Test
 {
-    public sealed class DirectoryLocatorTest
+    public sealed class HierarchyLocatorTest
     {
         private const string FileName = "foo.txt";
 
@@ -20,7 +20,7 @@ namespace Messerli.FileSystem.Test
             var startingDirectory = tempDirectory.FullName;
             File.WriteAllText(Path.Combine(startingDirectory, FileName), string.Empty);
 
-            var locator = new DirectoryLocator();
+            var locator = new HierarchyLocator();
             var directory = locator.FindFirstDirectoryContainingFile(FileName, startingDirectory);
 
             FunctionalAssert.IsSome(startingDirectory, directory);
@@ -32,7 +32,7 @@ namespace Messerli.FileSystem.Test
         {
             using var tempDirectory = new TempDirectoryBuilder().Create();
             var fileName = $"foo{separator}bar";
-            var locator = new DirectoryLocator();
+            var locator = new HierarchyLocator();
             Assert.Throws<ArgumentException>(() =>
                 locator.FindFirstDirectoryContainingFile(fileName, tempDirectory.FullName));
         }
@@ -41,7 +41,7 @@ namespace Messerli.FileSystem.Test
         public void FindFirstDirectoryContainingFile_EmptyFileName_ThrowsException()
         {
             using var tempDirectory = new TempDirectoryBuilder().Create();
-            var locator = new DirectoryLocator();
+            var locator = new HierarchyLocator();
             Assert.Throws<ArgumentException>(() =>
                 locator.FindFirstDirectoryContainingFile(string.Empty, tempDirectory.FullName));
         }
@@ -51,7 +51,7 @@ namespace Messerli.FileSystem.Test
         {
             var fileName = $"non_existent_file_{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.txt";
             using var tempDirectory = new TempDirectoryBuilder().Create();
-            var locator = new DirectoryLocator();
+            var locator = new HierarchyLocator();
             FunctionalAssert.IsNone(locator.FindFirstDirectoryContainingFile(fileName, tempDirectory.FullName));
         }
 
@@ -75,7 +75,7 @@ namespace Messerli.FileSystem.Test
             Directory.CreateDirectory(startingDirectory);
             File.WriteAllText(Path.Combine(tempDirectory.FullName, FileName), string.Empty);
 
-            var locator = new DirectoryLocator();
+            var locator = new HierarchyLocator();
             var directory = locator.FindFirstDirectoryContainingFile(FileName, startingDirectory);
 
             FunctionalAssert.IsSome(tempDirectory.FullName, directory);
