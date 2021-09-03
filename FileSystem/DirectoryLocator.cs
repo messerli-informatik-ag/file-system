@@ -13,14 +13,14 @@ namespace Messerli.FileSystem
     {
         public Option<string> FindFirstDirectoryContainingFile(string fileName, string startingDirectory)
         {
-            if (fileName.Contains(Path.DirectorySeparatorChar.ToString()) || fileName.Contains(Path.AltDirectorySeparatorChar.ToString()))
+            if (Path.GetInvalidFileNameChars().Any(fileName.Contains))
             {
-                throw new ArgumentException("File names should not contain directory separators", nameof(fileName));
+                throw new ArgumentException("File name contains invalid characters", nameof(fileName));
             }
 
             if (string.IsNullOrEmpty(fileName))
             {
-                throw new ArgumentException("File name should not be null", nameof(fileName));
+                throw new ArgumentException("File name should not be empty", nameof(fileName));
             }
 
             return FindFirstDirectoryContainingFileWithCanonicalizedPath(fileName, Path.GetFullPath(startingDirectory));
