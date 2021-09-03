@@ -365,7 +365,7 @@ namespace Messerli.FileSystem.Test
         [MemberData(nameof(Modifiers))]
         public void CallingModifiersCreatesACopy(Func<IFileOpeningBuilder, IFileOpeningBuilder> applyModifier)
         {
-            var builderOne = new Messerli.FileSystem.FileOpeningBuilder();
+            var builderOne = new FileOpeningBuilder();
             var builderTwo = applyModifier(builderOne);
             Assert.NotEqual(builderOne, builderTwo);
         }
