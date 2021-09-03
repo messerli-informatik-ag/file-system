@@ -16,19 +16,19 @@ namespace Messerli.FileSystem.Test
         private const string ContentToWrite = "wobble\n";
 
         private static readonly TestFileData RegularFile =
-            new TestFileData("regular_file.txt", "foo\n");
+            new("regular_file.txt", "foo\n");
 
         private static readonly TestFileData ReadOnlyFile =
-            new TestFileData("readonly_file.txt", "bar\n");
+            new("readonly_file.txt", "bar\n");
 
         private static readonly TestFileData HiddenFile =
-            new TestFileData("hidden_file.txt", "baz\n");
+            new("hidden_file.txt", "baz\n");
 
         private static readonly TestFileData NonExistentFile =
-            new TestFileData("nonexistent_file.txt", ContentToWrite);
+            new("nonexistent_file.txt", ContentToWrite);
 
         private static readonly TestFileData NestedFile =
-            new TestFileData(Path.Combine(SubDirectoryName, "nested_file.txt"), string.Empty);
+            new(Path.Combine(SubDirectoryName, "nested_file.txt"), string.Empty);
 
         private delegate string GetTestFile(string fileName);
 
@@ -395,7 +395,7 @@ namespace Messerli.FileSystem.Test
         }
 
         public static TheoryData<Func<IFileOpeningBuilder, IFileOpeningBuilder>> Modifiers()
-            => new TheoryData<Func<IFileOpeningBuilder, IFileOpeningBuilder>>
+            => new()
             {
                 b => b.Create(),
                 b => b.Truncate(),

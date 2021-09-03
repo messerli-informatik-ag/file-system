@@ -85,7 +85,7 @@ namespace Messerli.FileSystem
         }
 
         private FileOpeningSettings BuildSettings()
-            => new FileOpeningSettings(GetFileMode(), GetFileAccess(), FileShare.ReadWrite);
+            => new(GetFileMode(), GetFileAccess(), FileShare.ReadWrite);
 
         private FileMode GetFileMode()
             => _truncate
