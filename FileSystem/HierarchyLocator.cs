@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Funcky;
@@ -45,15 +44,11 @@ namespace Messerli.FileSystem
             => Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar);
 
         private Option<string> FindFirstDirectoryContainingFileWithCanonicalizedPath(string fileName, string startingDirectory)
-            => Sequence.Return(startingDirectory)
-                .Concat(ParentDirectories(startingDirectory))
+            => Sequence.Successors(startingDirectory, GetDirectoryNameOrNone)
                 .FirstOrNone(DirectoryContainsFile(fileName));
 
         private Func<string, bool> DirectoryContainsFile(string fileName)
             => directoryPath => _fileSystem.ExistsAndIsFile(Path.Combine(directoryPath, fileName));
-
-        private static IEnumerable<string> ParentDirectories(string path)
-            => Sequence.Generate(path, GetDirectoryNameOrNone);
 
         private static Option<string> GetDirectoryNameOrNone(string path)
             => Option.FromNullable(Path.GetDirectoryName(path));
