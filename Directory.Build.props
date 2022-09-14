@@ -2,4 +2,12 @@
 	<ItemGroup>
 		<PackageReference Include="Messerli.CodeStyle" PrivateAssets="all" />
 	</ItemGroup>
+	<PropertyGroup Label="Deterministic Builds and Source Link">
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	</PropertyGroup>
+	<ItemGroup Label="Deterministic Builds and Source Link">
+		<PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all" VersionOverride="1.1.1" />
+	</ItemGroup>
 </Project>
