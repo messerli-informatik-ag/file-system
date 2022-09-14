@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Runtime.Versioning;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using Messerli.Test.Utility;
@@ -18,10 +19,10 @@ public sealed class FileSystemTest
     private static readonly string FileInSubFolder = Path.Combine(SubFolder, "file.txt");
 
     [SkippableFact]
+    [SupportedOSPlatform("windows")]
     public void CheckIsDirectoryWritableReturnsFalseOnWindows()
     {
-        Skip.If(Environment.OSVersion.Platform == PlatformID.Unix);
-        Skip.If(Environment.OSVersion.Platform == PlatformID.MacOSX);
+        Skip.IfNot(OperatingSystem.IsWindows());
 
         var filesystem = CreateFileSystem();
         using var testEnvironment = CreateTestEnvironmentProvider();
