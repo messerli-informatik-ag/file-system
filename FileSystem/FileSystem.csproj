@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
     <PropertyGroup>
-        <Version>0.1.8</Version>
+        <Version>0.2.0</Version>
         <RootNamespace>Messerli.FileSystem</RootNamespace>
         <AssemblyName>Messerli.FileSystem</AssemblyName>
     </PropertyGroup>
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
-        <LangVersion>9.0</LangVersion>
+        <LangVersion>10.0</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <PropertyGroup>

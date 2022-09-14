@@ -34,3 +34,7 @@ Initial release
 ## 0.1.8
 * Add a new helper function `IHierarchyLocator.FindClosestParentDirectoryContainingFile`
   that finds the closest directory that contains a file with the given name.
+
+## 0.2.0
+* Update to Funcky 3.0
+* Enable source link
