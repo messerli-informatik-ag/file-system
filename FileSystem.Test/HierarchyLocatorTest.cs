@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
-using Funcky.Xunit;
+using Funcky;
 using Messerli.TempDirectory;
 using Xunit;
 
@@ -23,7 +23,7 @@ namespace Messerli.FileSystem.Test
             var locator = new HierarchyLocator();
             var directory = locator.FindClosestParentDirectoryContainingFile(FileName, startingDirectory);
 
-            FunctionalAssert.IsSome(startingDirectory, directory);
+            FunctionalAssert.Some(startingDirectory, directory);
         }
 
         [Theory]
@@ -52,7 +52,7 @@ namespace Messerli.FileSystem.Test
             var fileName = $"non_existent_file_{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.txt";
             using var tempDirectory = new TempDirectoryBuilder().Create();
             var locator = new HierarchyLocator();
-            FunctionalAssert.IsNone(locator.FindClosestParentDirectoryContainingFile(fileName, tempDirectory.FullName));
+            FunctionalAssert.None(locator.FindClosestParentDirectoryContainingFile(fileName, tempDirectory.FullName));
         }
 
         public static TheoryData<char> DirectorySeparators()
@@ -78,7 +78,7 @@ namespace Messerli.FileSystem.Test
             var locator = new HierarchyLocator();
             var directory = locator.FindClosestParentDirectoryContainingFile(FileName, startingDirectory);
 
-            FunctionalAssert.IsSome(tempDirectory.FullName, directory);
+            FunctionalAssert.Some(tempDirectory.FullName, directory);
         }
 
         private static string GenerateNestedPath(int level)
