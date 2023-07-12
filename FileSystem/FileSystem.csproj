@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
     <PropertyGroup>
-        <Version>0.2.0</Version>
+        <Version>0.2.1</Version>
         <RootNamespace>Messerli.FileSystem</RootNamespace>
         <AssemblyName>Messerli.FileSystem</AssemblyName>
     </PropertyGroup>
@@ -16,7 +16,6 @@
         <RepositoryUrl>https://github.com/messerli-informatik-ag/file-system</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
-        <Copyright>© Messerli Informatik AG. All rights reserved.</Copyright>
         <PackageTags>filesystem</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
